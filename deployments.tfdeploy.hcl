@@ -14,12 +14,29 @@ deployment "development" {
   }
 }
 
-# deployment "production" {
-#   inputs = {
-#     regions        = ["ap-southeast-2", "ap-southeast-1"]
-#     role_arn       = "arn:aws:iam::855831148133:role/tfstacks-role"
-#     identity_token = identity_token.aws.jwt
-#     default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
-#   }
-# }
+deployment "production" {
+  inputs = {
+    regions        = ["ap-southeast-2", "ap-southeast-1"]
+    role_arn       = "arn:aws:iam::855831148133:role/tfstacks-role"
+    identity_token = identity_token.aws.jwt
+    default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
+  }
+}
 
+deployment "production2" {
+  inputs = {
+    regions        = ["ap-southeast-2", "ap-southeast-1"]
+    role_arn       = "arn:aws:iam::855831148133:role/tfstacks-role"
+    identity_token = identity_token.aws.jwt
+    default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
+  }
+}
+
+deployment "production3" {
+  inputs = {
+    regions        = ["ap-southeast-2", "ap-southeast-1"]
+    role_arn       = "arn:aws:iam::855831148133:role/tfstacks-role"
+    identity_token = identity_token.aws.jwt
+    default_tags   = { stacks-preview-example = "lambda-component-expansion-stack" }
+  }
+}
