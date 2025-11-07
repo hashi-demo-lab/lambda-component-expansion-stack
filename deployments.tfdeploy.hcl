@@ -94,11 +94,11 @@ deployment_group "production" {
 
 deployment "dev" {
   inputs = {
-    environment      = "dev"
-    regions          = ["us-east-1"]
-    role_arn         = "<Set to your development AWS account IAM role ARN>"
-    identity_token   = identity_token.aws.jwt
-    lambda_memory_mb = 128
+    environment        = "dev"
+    regions            = ["us-east-1"]
+    role_arn           = "<Set to your development AWS account IAM role ARN>"
+    aws_identity_token = identity_token.aws.jwt
+    lambda_memory_mb   = 128
     log_retention_days = 7
     default_tags = {
       Stack       = "serverless-api-stack"
@@ -112,11 +112,11 @@ deployment "dev" {
 
 deployment "test" {
   inputs = {
-    environment      = "test"
-    regions          = ["us-east-1"]
-    role_arn         = "<Set to your test AWS account IAM role ARN>"
-    identity_token   = identity_token.aws.jwt
-    lambda_memory_mb = 256
+    environment        = "test"
+    regions            = ["us-east-1"]
+    role_arn           = "<Set to your test AWS account IAM role ARN>"
+    aws_identity_token = identity_token.aws.jwt
+    lambda_memory_mb   = 256
     log_retention_days = 14
     default_tags = {
       Stack       = "serverless-api-stack"
@@ -130,11 +130,11 @@ deployment "test" {
 
 deployment "staging" {
   inputs = {
-    environment      = "staging"
-    regions          = ["us-east-1", "us-west-2"]
-    role_arn         = "<Set to your staging AWS account IAM role ARN>"
-    identity_token   = identity_token.aws.jwt
-    lambda_memory_mb = 512
+    environment        = "staging"
+    regions            = ["us-east-1", "us-west-2"]
+    role_arn           = "<Set to your staging AWS account IAM role ARN>"
+    aws_identity_token = identity_token.aws.jwt
+    lambda_memory_mb   = 512
     log_retention_days = 30
     default_tags = {
       Stack       = "serverless-api-stack"
@@ -148,11 +148,11 @@ deployment "staging" {
 
 deployment "production" {
   inputs = {
-    environment      = "production"
-    regions          = ["us-east-1", "us-west-2", "eu-west-1"]
-    role_arn         = "<Set to your production AWS account IAM role ARN>"
-    identity_token   = identity_token.aws.jwt
-    lambda_memory_mb = 1024
+    environment        = "production"
+    regions            = ["us-east-1", "us-west-2", "eu-west-1"]
+    role_arn           = "<Set to your production AWS account IAM role ARN>"
+    aws_identity_token = identity_token.aws.jwt
+    lambda_memory_mb   = 1024
     log_retention_days = 90
     default_tags = {
       Stack       = "serverless-api-stack"

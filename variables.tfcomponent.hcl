@@ -41,7 +41,7 @@ variable "regions" {
 # Authentication Configuration
 # ==============================================================================
 
-variable "identity_token" {
+variable "aws_identity_token" {
   type        = string
   description = "OIDC identity token for AWS authentication via Web Identity"
   ephemeral   = true
