@@ -12,62 +12,57 @@ identity_token "aws" {
 # Auto-Approval Rules for Deployment Groups
 # ==============================================================================
 
-# Development: Most permissive - auto-approve all successful plans
+# Development: Liberal auto-approval for rapid iteration
 deployment_auto_approve "dev_rapid_iteration" {
   check {
     condition = context.plan.applyable
-    reason    = "Development plan failed validation and requires manual review"
+    reason    = "Plan must be applyable"
   }
+  
   check {
     condition = context.plan.changes.total <= 50
-    reason    = "Development plan exceeds 50 changes (${context.plan.changes.total} proposed) - requires manual review for safety"
+    reason    = "Development allows up to 50 changes (current: ${context.plan.changes.total})"
   }
 }
 
-# Test: Moderate restrictions - no destroys, successful downstream dependency
+# Test: Moderate guardrails - no resource deletion
 deployment_auto_approve "test_safe_changes" {
   check {
     condition = context.plan.applyable
-    reason    = "Test plan failed validation"
+    reason    = "Plan must be applyable"
   }
+  
   check {
     condition = context.plan.changes.remove == 0
-    reason    = "Test environment does not allow resource destruction (${context.plan.changes.remove} resources would be destroyed)"
+    reason    = "Test environment cannot auto-approve resource deletions (${context.plan.changes.remove} removals detected)"
   }
+  
   check {
     condition = context.plan.changes.total <= 20
-    reason    = "Test environment limits changes to 20 (${context.plan.changes.total} changes proposed)"
-  }
-  check {
-    # Test can only auto-approve if Dev was successful
-    condition = context.plan.deployment_state("dev").status == "successful"
-    reason    = "Cannot auto-approve Test until Dev deployment is successful. Current Dev status: ${context.plan.deployment_state("dev").status}"
+    reason    = "Test allows up to 20 changes (current: ${context.plan.changes.total})"
   }
 }
 
-# Staging: Strict guardrails - requires both Dev AND Test success
-deployment_auto_approve "staging_gated_promotion" {
+# Staging: Strict guardrails with business hours enforcement
+deployment_auto_approve "staging_gated" {
   check {
     condition = context.plan.applyable
-    reason    = "Staging plan failed validation"
+    reason    = "Plan must be applyable"
   }
+  
   check {
     condition = context.plan.changes.remove == 0
-    reason    = "Staging environment prohibits resource destruction (${context.plan.changes.remove} resources would be destroyed)"
+    reason    = "Staging cannot auto-approve resource deletions (${context.plan.changes.remove} removals detected)"
   }
+  
   check {
     condition = context.plan.changes.total <= 10
-    reason    = "Staging environment allows maximum 10 changes (${context.plan.changes.total} changes proposed)"
+    reason    = "Staging allows maximum 10 changes (current: ${context.plan.changes.total})"
   }
+  
   check {
-    # Staging requires BOTH Dev AND Test to be successful (deployment pipeline)
-    condition = context.plan.deployment_state("dev").status == "successful" && context.plan.deployment_state("test").status == "successful"
-    reason    = "Staging requires successful Dev AND Test deployments. Dev: ${context.plan.deployment_state("dev").status}, Test: ${context.plan.deployment_state("test").status}"
-  }
-  check {
-    # Additional business hours check for staging (enterprise requirement)
     condition = context.plan.timestamp.hour >= 9 && context.plan.timestamp.hour < 17
-    reason    = "Staging deployments only auto-approve during business hours (9 AM - 5 PM UTC). Current time: ${context.plan.timestamp.hour}:00 UTC"
+    reason    = "Staging deployments only auto-approve during business hours (9 AM - 5 PM UTC, current: ${context.plan.timestamp.hour}:00)"
   }
 }
 
