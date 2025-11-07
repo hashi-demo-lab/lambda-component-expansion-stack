@@ -25,4 +25,5 @@ variable "role_arn" {
   type        = string
   description = "ARN of the IAM role to assume for AWS operations. Value provided by 'stacks-examples' variable set in HCP Terraform"
   sensitive   = true
+  ephemeral   = true  # Required because variable set values are ephemeral
 }
