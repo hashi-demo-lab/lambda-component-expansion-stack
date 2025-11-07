@@ -113,7 +113,7 @@ deployment "dev" {
   deployment_group = deployment_group.development
   
   # flip this on only when you intend to destroy
-  # destroy = true
+  destroy = true
 }
 
 deployment "test" {
@@ -126,7 +126,7 @@ deployment "test" {
   deployment_group = deployment_group.test
 
   # flip this on only when you intend to destroy
-  # destroy = true
+  destroy = true
 }
 
 deployment "staging" {
@@ -139,7 +139,7 @@ deployment "staging" {
   deployment_group = deployment_group.staging
 
   # flip this on only when you intend to destroy
-  # destroy = true
+  destroy = true
 }
 
 deployment "production" {
@@ -152,5 +152,5 @@ deployment "production" {
   deployment_group = deployment_group.production
 
   # flip this on only when you intend to destroy
-  # destroy = true
+  destroy = true
 }
