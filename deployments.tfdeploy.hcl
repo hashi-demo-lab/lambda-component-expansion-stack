@@ -5,7 +5,7 @@
 # OIDC Identity Tokens for AWS Authentication
 # ==============================================================================
 identity_token "aws" {
-  audience = ["aws.workload.identity"]
+  audience = ["terraform-stacks-private-preview"]
 }
 
 # ==============================================================================
