@@ -99,6 +99,9 @@ deployment "dev" {
     aws_identity_token = identity_token.aws.jwt
   }
   deployment_group = deployment_group.development
+  
+  # flip this on only when you intend to destroy
+  destroy = true
 }
 
 deployment "test" {
@@ -108,6 +111,9 @@ deployment "test" {
     aws_identity_token = identity_token.aws.jwt
   }
   deployment_group = deployment_group.test
+
+  # flip this on only when you intend to destroy
+  destroy = true
 }
 
 deployment "staging" {
@@ -117,6 +123,9 @@ deployment "staging" {
     aws_identity_token = identity_token.aws.jwt
   }
   deployment_group = deployment_group.staging
+
+  # flip this on only when you intend to destroy
+  destroy = true
 }
 
 deployment "production" {
@@ -126,4 +135,7 @@ deployment "production" {
     aws_identity_token = identity_token.aws.jwt
   }
   deployment_group = deployment_group.production
+
+  # flip this on only when you intend to destroy
+  destroy = true
 }
