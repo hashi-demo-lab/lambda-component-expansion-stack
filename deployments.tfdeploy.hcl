@@ -74,7 +74,6 @@ deployment_auto_approve "staging_gated" {
 # ==============================================================================
 
 deployment_group "development" {
-  deployments = [deployment.dev]
   
   auto_approve_checks = [
     deployment_auto_approve.dev_rapid_iteration
@@ -82,7 +81,6 @@ deployment_group "development" {
 }
 
 deployment_group "test" {
-  deployments = [deployment.test]
   
   auto_approve_checks = [
     deployment_auto_approve.test_safe_changes
@@ -90,7 +88,6 @@ deployment_group "test" {
 }
 
 deployment_group "staging" {
-  deployments = [deployment.staging]
   
   auto_approve_checks = [
     deployment_auto_approve.staging_gated
@@ -98,7 +95,6 @@ deployment_group "staging" {
 }
 
 deployment_group "production" {
-  deployments = [deployment.production]
   
   # NO auto_approve_checks = manual approval required for production
 }
