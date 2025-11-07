@@ -23,8 +23,6 @@ variable "aws_identity_token" {
 
 variable "role_arn" {
   type        = string
-  description = "ARN of the IAM role to assume for AWS operations. Must have permissions for S3, Lambda, API Gateway, CloudWatch, and IAM"
+  description = "ARN of the IAM role to assume for AWS operations. Value provided by 'stacks-examples' variable set in HCP Terraform"
   sensitive   = true
 }
-
-

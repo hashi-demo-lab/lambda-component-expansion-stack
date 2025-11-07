@@ -5,7 +5,16 @@
 # OIDC Identity Tokens for AWS Authentication
 # ==============================================================================
 identity_token "aws" {
-  audience = ["terraform-stacks-private-preview"]
+  audience = ["aws.workload.identity"]
+}
+
+# ==============================================================================
+# Variable Set Access
+# ==============================================================================
+# Access the 'stacks-examples' variable set to retrieve role_arn
+store "varset" "stacks_config" {
+  name     = "stacks-examples"
+  category = "terraform"
 }
 
 # ==============================================================================
@@ -102,11 +111,13 @@ deployment_group "production" {
 # ==============================================================================
 # Environment Deployments
 # ==============================================================================
+# Note: role_arn value comes from the 'stacks-examples' variable set
+# accessed via store.varset.stacks_config.role_arn
 
 deployment "dev" {
   inputs = {
     regions            = ["ap-southeast-2"]  # Sydney
-    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
+    role_arn           = store.varset.stacks_config.role_arn
     aws_identity_token = identity_token.aws.jwt
   }
   
@@ -116,41 +127,41 @@ deployment "dev" {
   destroy = true
 }
 
-deployment "test" {
-  inputs = {
-    regions            = ["ap-southeast-2"]  # Sydney
-    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
-    aws_identity_token = identity_token.aws.jwt
-  }
+# deployment "test" {
+#   inputs = {
+#     regions            = ["ap-southeast-2"]  # Sydney
+#     role_arn           = store.varset.stacks_config.role_arn
+#     aws_identity_token = identity_token.aws.jwt
+#   }
   
-  deployment_group = deployment_group.test
+#   deployment_group = deployment_group.test
 
-  # flip this on only when you intend to destroy
-  destroy = true
-}
+#   # flip this on only when you intend to destroy
+#   destroy = true
+# }
 
-deployment "staging" {
-  inputs = {
-    regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
-    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
-    aws_identity_token = identity_token.aws.jwt
-  }
+# deployment "staging" {
+#   inputs = {
+#     regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
+#     role_arn           = store.varset.stacks_config.role_arn
+#     aws_identity_token = identity_token.aws.jwt
+#   }
   
-  deployment_group = deployment_group.staging
+#   deployment_group = deployment_group.staging
 
-  # flip this on only when you intend to destroy
-  destroy = true
-}
+#   # flip this on only when you intend to destroy
+#   destroy = true
+# }
 
-deployment "production" {
-  inputs = {
-    regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
-    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
-    aws_identity_token = identity_token.aws.jwt
-  }
+# deployment "production" {
+#   inputs = {
+#     regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
+#     role_arn           = store.varset.stacks_config.role_arn
+#     aws_identity_token = identity_token.aws.jwt
+#   }
   
-  deployment_group = deployment_group.production
+#   deployment_group = deployment_group.production
 
-  # flip this on only when you intend to destroy
-  destroy = true
-}
+#   # flip this on only when you intend to destroy
+#   destroy = true
+# }
