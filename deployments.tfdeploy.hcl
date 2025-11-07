@@ -124,7 +124,7 @@ deployment "dev" {
   deployment_group = deployment_group.development
   
   # flip this on only when you intend to destroy
-  # destroy = true
+  destroy = true
 }
 
 # deployment "test" {
