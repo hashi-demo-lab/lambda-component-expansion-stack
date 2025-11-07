@@ -94,73 +94,36 @@ deployment_group "production" {
 
 deployment "dev" {
   inputs = {
-    environment        = "dev"
-    regions            = ["ap-southeast-2"]
+    regions            = ["ap-southeast-2"]  # Sydney
     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
     aws_identity_token = identity_token.aws.jwt
-    lambda_memory_mb   = 128
-    log_retention_days = 7
-    default_tags = {
-      Stack       = "serverless-api-stack"
-      Environment = "Development"
-      ManagedBy   = "Terraform-Stacks"
-      CostCenter  = "Engineering"
-    }
   }
   deployment_group = deployment_group.development
 }
 
 deployment "test" {
   inputs = {
-    environment        = "test"
-    regions            = ["ap-southeast-2"]
+    regions            = ["ap-southeast-2"]  # Sydney
     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
     aws_identity_token = identity_token.aws.jwt
-    lambda_memory_mb   = 256
-    log_retention_days = 14
-    default_tags = {
-      Stack       = "serverless-api-stack"
-      Environment = "Test"
-      ManagedBy   = "Terraform-Stacks"
-      CostCenter  = "Engineering"
-    }
   }
   deployment_group = deployment_group.test
 }
 
 deployment "staging" {
   inputs = {
-    environment        = "staging"
-    regions            = ["ap-southeast-2", "ap-southeast-1"]
+    regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
     aws_identity_token = identity_token.aws.jwt
-    lambda_memory_mb   = 512
-    log_retention_days = 30
-    default_tags = {
-      Stack       = "serverless-api-stack"
-      Environment = "Staging"
-      ManagedBy   = "Terraform-Stacks"
-      CostCenter  = "Engineering"
-    }
   }
   deployment_group = deployment_group.staging
 }
 
 deployment "production" {
   inputs = {
-    environment        = "production"
-    regions            = ["ap-southeast-2", "ap-southeast-1", "ap-southeast-4"]
+    regions            = ["ap-southeast-2", "ap-southeast-1", "ap-southeast-4"]  # Sydney, Singapore, Melbourne
     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
     aws_identity_token = identity_token.aws.jwt
-    lambda_memory_mb   = 1024
-    log_retention_days = 90
-    default_tags = {
-      Stack       = "serverless-api-stack"
-      Environment = "Production"
-      ManagedBy   = "Terraform-Stacks"
-      CostCenter  = "Production-Services"
-      Compliance  = "Required"
-    }
   }
   deployment_group = deployment_group.production
 }
