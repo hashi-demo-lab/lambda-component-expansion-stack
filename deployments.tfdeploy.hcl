@@ -20,45 +20,45 @@ deployment_auto_approve "dev_allow_changes" {
   }
 }
 
-# # Test: Moderate guardrails - no destroys, limited changes
-# deployment_auto_approve "test_safe_changes" {
-#   check {
-#     condition = context.plan.changes.remove == 0
-#     reason    = "Test environment does not allow resource destruction (${context.plan.changes.remove} resources would be destroyed)"
-#   }
-#   check {
-#     condition = context.plan.changes.total <= 10
-#     reason    = "Test environment limits changes to 10 (${context.plan.changes.total} changes proposed)"
-#   }
-# }
+# Test: Moderate guardrails - no destroys, limited changes
+deployment_auto_approve "test_safe_changes" {
+  check {
+    condition = context.plan.changes.remove == 0
+    reason    = "Test environment does not allow resource destruction (${context.plan.changes.remove} resources would be destroyed)"
+  }
+  check {
+    condition = context.plan.changes.total <= 10
+    reason    = "Test environment limits changes to 10 (${context.plan.changes.total} changes proposed)"
+  }
+}
 
-# # Staging: Strict guardrails - minimal changes only
-# deployment_auto_approve "staging_strict" {
-#   check {
-#     condition = context.plan.changes.remove == 0
-#     reason    = "Staging environment prohibits resource destruction (${context.plan.changes.remove} resources would be destroyed)"
-#   }
-#   check {
-#     condition = context.plan.changes.total <= 5
-#     reason    = "Staging environment allows maximum 5 changes (${context.plan.changes.total} changes proposed)"
-#   }
-# }
+# Staging: Strict guardrails - minimal changes only
+deployment_auto_approve "staging_strict" {
+  check {
+    condition = context.plan.changes.remove == 0
+    reason    = "Staging environment prohibits resource destruction (${context.plan.changes.remove} resources would be destroyed)"
+  }
+  check {
+    condition = context.plan.changes.total <= 5
+    reason    = "Staging environment allows maximum 5 changes (${context.plan.changes.total} changes proposed)"
+  }
+}
 
-# # Production: Most restrictive - very small changes, no destroys
-# deployment_auto_approve "production_critical" {
-#   check {
-#     condition = context.plan.changes.remove == 0
-#     reason    = "Production environment absolutely prohibits resource destruction (${context.plan.changes.remove} resources would be destroyed)"
-#   }
-#   check {
-#     condition = context.plan.changes.total <= 3
-#     reason    = "Production environment allows maximum 3 changes per deployment (${context.plan.changes.total} changes proposed)"
-#   }
-#   check {
-#     condition = context.success == true
-#     reason    = "Production deployment failed and requires manual intervention"
-#   }
-# }
+# Production: Most restrictive - very small changes, no destroys
+deployment_auto_approve "production_critical" {
+  check {
+    condition = context.plan.changes.remove == 0
+    reason    = "Production environment absolutely prohibits resource destruction (${context.plan.changes.remove} resources would be destroyed)"
+  }
+  check {
+    condition = context.plan.changes.total <= 3
+    reason    = "Production environment allows maximum 3 changes per deployment (${context.plan.changes.total} changes proposed)"
+  }
+  check {
+    condition = context.success == true
+    reason    = "Production deployment failed and requires manual intervention"
+  }
+}
 
 # ==============================================================================
 # Deployment Groups
@@ -70,23 +70,23 @@ deployment_group "development" {
   ]
 }
 
-# deployment_group "test" {
-#   auto_approve_checks = [
-#     deployment_auto_approve.test_safe_changes
-#   ]
-# }
+deployment_group "test" {
+  auto_approve_checks = [
+    deployment_auto_approve.test_safe_changes
+  ]
+}
 
-# deployment_group "staging" {
-#   auto_approve_checks = [
-#     deployment_auto_approve.staging_strict
-#   ]
-# }
+deployment_group "staging" {
+  auto_approve_checks = [
+    deployment_auto_approve.staging_strict
+  ]
+}
 
-# deployment_group "production" {
-#   auto_approve_checks = [
-#     deployment_auto_approve.production_critical
-#   ]
-# }
+deployment_group "production" {
+  auto_approve_checks = [
+    deployment_auto_approve.production_critical
+  ]
+}
 
 # ==============================================================================
 # Environment Deployments
@@ -101,30 +101,29 @@ deployment "dev" {
   deployment_group = deployment_group.development
 }
 
-# deployment "test" {
-#   inputs = {
-#     regions            = ["ap-southeast-2"]  # Sydney
-#     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
-#     aws_identity_token = identity_token.aws.jwt
-#   }
-#   deployment_group = deployment_group.test
-# }
+deployment "test" {
+  inputs = {
+    regions            = ["ap-southeast-2"]  # Sydney
+    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
+    aws_identity_token = identity_token.aws.jwt
+  }
+  deployment_group = deployment_group.test
+}
 
-# deployment "staging" {
-#   inputs = {
-#     regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
-#     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
-#     aws_identity_token = identity_token.aws.jwt
-#   }
-#   deployment_group = deployment_group.staging
-# }
+deployment "staging" {
+  inputs = {
+    regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
+    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
+    aws_identity_token = identity_token.aws.jwt
+  }
+  deployment_group = deployment_group.staging
+}
 
-# deployment "production" {
-#   inputs = {
-#     regions            = ["ap-southeast-2", "ap-southeast-1", "ap-southeast-4"]  # Sydney, Singapore, Melbourne
-#     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
-#     aws_identity_token = identity_token.aws.jwt
-#   }
-#   deployment_group = deployment_group.production
-# }
-
+deployment "production" {
+  inputs = {
+    regions            = ["ap-southeast-2", "ap-southeast-1", "ap-southeast-4"]  # Sydney, Singapore, Melbourne
+    role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
+    aws_identity_token = identity_token.aws.jwt
+  }
+  deployment_group = deployment_group.production
+}
