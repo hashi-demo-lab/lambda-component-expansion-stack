@@ -75,18 +75,32 @@ deployment_auto_approve "staging_gated" {
 
 deployment_group "development" {
   deployments = [deployment.dev]
+  
+  auto_approve_checks = [
+    deployment_auto_approve.dev_rapid_iteration
+  ]
 }
 
 deployment_group "test" {
   deployments = [deployment.test]
+  
+  auto_approve_checks = [
+    deployment_auto_approve.test_safe_changes
+  ]
 }
 
 deployment_group "staging" {
   deployments = [deployment.staging]
+  
+  auto_approve_checks = [
+    deployment_auto_approve.staging_gated
+  ]
 }
 
 deployment_group "production" {
   deployments = [deployment.production]
+  
+  # NO auto_approve_checks = manual approval required for production
 }
 
 # ==============================================================================
@@ -100,11 +114,7 @@ deployment "dev" {
     aws_identity_token = identity_token.aws.jwt
   }
   
-  # Development auto-approves with permissive rules
   deployment_group = deployment_group.development
-  auto_approve_checks = [
-    deployment_auto_approve.dev_rapid_iteration
-  ]
   
   # flip this on only when you intend to destroy
   # destroy = true
@@ -117,11 +127,7 @@ deployment "test" {
     aws_identity_token = identity_token.aws.jwt
   }
   
-  # Test auto-approves only if Dev is successful
   deployment_group = deployment_group.test
-  auto_approve_checks = [
-    deployment_auto_approve.test_safe_changes
-  ]
 
   # flip this on only when you intend to destroy
   # destroy = true
@@ -134,11 +140,7 @@ deployment "staging" {
     aws_identity_token = identity_token.aws.jwt
   }
   
-  # Staging auto-approves only if Dev AND Test are successful + business hours
   deployment_group = deployment_group.staging
-  auto_approve_checks = [
-    deployment_auto_approve.staging_gated_promotion
-  ]
 
   # flip this on only when you intend to destroy
   # destroy = true
@@ -151,9 +153,7 @@ deployment "production" {
     aws_identity_token = identity_token.aws.jwt
   }
   
-  # Production: NO auto-approval - always manual review required
   deployment_group = deployment_group.production
-  # NO auto_approve_checks = manual approval enforced
 
   # flip this on only when you intend to destroy
   # destroy = true
