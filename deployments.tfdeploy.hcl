@@ -121,7 +121,7 @@ deployment "staging" {
 
 deployment "production" {
   inputs = {
-    regions            = ["ap-southeast-2", "ap-southeast-1", "ap-southeast-4"]  # Sydney, Singapore, Melbourne
+    regions            = ["ap-southeast-2", "ap-southeast-1"]  # Sydney, Singapore
     role_arn           = "arn:aws:iam::258850230659:role/tfstacks-role"
     aws_identity_token = identity_token.aws.jwt
   }
