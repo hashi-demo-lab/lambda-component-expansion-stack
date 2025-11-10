@@ -13,7 +13,7 @@ identity_token "aws" {
 # ==============================================================================
 # Access the 'stacks-examples' variable set to retrieve role_arn
 store "varset" "stacks_config" {
-  name     = "stacks-examples"
+  name     = "stacks"
   category = "terraform"
 }
 
